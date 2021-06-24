@@ -20,7 +20,17 @@ class Speed_Test_Gui(Tk):
         print("Choosing best server...")
         self.best_server = self.test.get_best_server()
         print(self.best_server)
-        pass
+        print(f"Found: {self.best_server['host']} located in {self.best_server['country']}")
+
+        print("Performing download test...")
+        self.download_result = self.test.download()
+        print("Performing upload test...")
+        self.upload_result = self.test.upload()
+        self.ping_result = self.test.results.ping
+
+        print(self.download_result)
+        print(self.upload_result)
+        print(self.ping_result)
 
 
 if __name__ == "__main__":
