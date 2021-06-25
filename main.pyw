@@ -31,10 +31,15 @@ class Speed_Test_Gui(Tk):
         self.test_button.grid(row=1, column=1)
 
     def download_test(self):
-        print("Download test here")
+        print("Running Download Test...")
+        self.download_result = self.test.download() / 1024 / 1024
+        print(f"{self.download_result:.2f} Mbit/s")
 
     def upload_test(self):
-        print("Upload test here")
+        print("Running Upload Test...")
+        self.upload_result = self.test.upload() / 1024 / 1024
+        print(f"{self.upload_result:.2f} Mbit/s")
+
 
     def run_speed_test(self):
         self.test = Speedtest()
@@ -46,7 +51,6 @@ class Speed_Test_Gui(Tk):
         print(self.best_server)
 
         if self.download_var.get() == 1:
-            print("Running Download Test...")
             self.download_test()
         if self.upload_var.get() == 1:
             self.upload_test()
@@ -56,16 +60,6 @@ class Speed_Test_Gui(Tk):
         # print(
         #     f"Found: {self.best_server['host']} located in {self.best_server['country']}"
         # )
-
-        # print("Performing download test...")
-        # self.download_result = self.test.download()
-        # print("Performing upload test...")
-        # self.upload_result = self.test.upload()
-        # self.ping_result = self.test.results.ping
-
-        # print(self.download_result)
-        # print(self.upload_result)
-        # print(self.ping_result)
 
 
 if __name__ == "__main__":
