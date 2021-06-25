@@ -30,16 +30,23 @@ class Speed_Test_Gui(Tk):
         )
         self.test_button.grid(row=1, column=1)
 
+        self.status_label = Label(self, text="Status: ")
+        self.status_label.grid(row=1, column=0)
+        self.results_label = Label(self, text="Results: ")
+        self.results_label.grid(row=2, column=0)
+
     def download_test(self):
         print("Running Download Test...")
-        self.download_result = self.test.download() / 1024 / 1024
-        print(f"{self.download_result:.2f} Mbit/s")
+        download_result = self.test.download()
+        result_formatted = f"{download_result / 1024 / 1024:.2f} Mbit/s"
+        print(result_formatted)
+        updated_label_string = f"{self.results_label['text']}\n{result_formatted}"
+        self.results_label.config(text=updated_label_string)
 
     def upload_test(self):
         print("Running Upload Test...")
         self.upload_result = self.test.upload() / 1024 / 1024
         print(f"{self.upload_result:.2f} Mbit/s")
-
 
     def run_speed_test(self):
         self.test = Speedtest()
@@ -48,18 +55,21 @@ class Speed_Test_Gui(Tk):
         self.test.get_servers()
         print("Choosing best server...")
         self.best_server = self.test.get_best_server()
-        print(self.best_server)
+        print(
+            f"Server: {self.best_server['name']} located in {self.best_server['country']}"
+        )
 
         if self.download_var.get() == 1:
             self.download_test()
+
         if self.upload_var.get() == 1:
             self.upload_test()
+
         if self.ping_var.get() == 1:
             print("Ping test")
-
-        # print(
-        #     f"Found: {self.best_server['host']} located in {self.best_server['country']}"
-        # )
+            self.ping_result = self.test.results.ping
+            print(f"Ping - {self.ping_result:.0f} ms")
+            print(self.results_label["text"])
 
 
 if __name__ == "__main__":
