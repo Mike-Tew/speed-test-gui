@@ -7,9 +7,9 @@ class Speed_Test_Gui(Tk):
         super().__init__()
         self.title("Internet Speed Test")
         self.geometry(f"+500+300")
-        self.download_var = IntVar()
-        self.upload_var = IntVar()
-        self.ping_var = IntVar()
+        self.download_var = IntVar(value=1)
+        self.upload_var = IntVar(value=1)
+        self.ping_var = IntVar(value=1)
 
         self.test_frame = LabelFrame(self, text="Select Tests")
         self.test_frame.grid(row=0, column=0, padx=20, pady=10, ipadx=10, ipady=10)
@@ -37,10 +37,11 @@ class Speed_Test_Gui(Tk):
 
     def download_test(self):
         print("Running Download Test...")
+        self.status_label.config(text="Running Download Test...")
         download_result = self.test.download()
-        result_formatted = f"{download_result / 1024 / 1024:.2f} Mbit/s"
-        print(result_formatted)
-        updated_label_string = f"{self.results_label['text']}\n{result_formatted}"
+        formatted_result = f"{download_result / 1024 / 1024:.2f} Mbit/s"
+        print(formatted_result)
+        updated_label_string = f"{self.results_label['text']}\n{formatted_result}"
         self.results_label.config(text=updated_label_string)
 
     def upload_test(self):
