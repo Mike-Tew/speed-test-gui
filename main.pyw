@@ -32,22 +32,27 @@ class Speed_Test_Gui(Tk):
 
         self.status_label = Label(self, text="Status: ")
         self.status_label.grid(row=1, column=0)
-        self.results_label = Label(self, text="Results: ")
+        self.results_label = Label(self, text="Results")
         self.results_label.grid(row=2, column=0)
 
     def download_test(self):
         print("Running Download Test...")
         self.status_label.config(text="Running Download Test...")
         download_result = self.test.download()
-        formatted_result = f"{download_result / 1024 / 1024:.2f} Mbit/s"
+        formatted_result = f"Download: {download_result / 1024 / 1024:.2f} Mbit/s"
         print(formatted_result)
         updated_label_string = f"{self.results_label['text']}\n{formatted_result}"
         self.results_label.config(text=updated_label_string)
 
     def upload_test(self):
         print("Running Upload Test...")
-        self.upload_result = self.test.upload() / 1024 / 1024
-        print(f"{self.upload_result:.2f} Mbit/s")
+        upload_result = self.test.upload()
+        formatted_result = f"Upload: {upload_result / 1024 / 1024:.2f} Mbit/s"
+        updated_label_string = f"{self.results_label['text']}\n{formatted_result}"
+        self.results_label.config(text=updated_label_string)
+        print(f"{formatted_result} Mbit/s")
+
+
 
     def run_speed_test(self):
         self.test = Speedtest()
