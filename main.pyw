@@ -39,7 +39,7 @@ class Speed_Test_Gui(Tk):
         formatted_result = f"{test_name}: {result / 1024 / 1024:.2f} Mbit/s"
         updated_label_string = f"{self.results_label['text']}\n{formatted_result}"
         self.results_label.config(text=updated_label_string)
-        print(f"{formatted_result} Mbit/s")
+        print(f"{formatted_result}")
 
     def download_test(self):
         print("Running Download Test...")
@@ -71,9 +71,13 @@ class Speed_Test_Gui(Tk):
 
         if self.ping_var.get() == 1:
             print("Ping test")
-            self.ping_result = self.test.results.ping
-            print(f"Ping - {self.ping_result:.0f} ms")
-            print(self.results_label["text"])
+            ping = self.test.results.ping
+            formatted_ping_results = f"Ping: {ping:.0f} ms"
+            updated_label_string = (
+                f"{self.results_label['text']}\n{formatted_ping_results}"
+            )
+            print(f"Ping: {ping:.0f} ms")
+            self.results_label.config(text=updated_label_string)
 
 
 if __name__ == "__main__":
