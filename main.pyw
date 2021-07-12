@@ -26,24 +26,29 @@ class Speed_Test_Gui(Tk):
         )
         self.ping_checkbox.grid(row=2, column=0, sticky="w", padx=20)
         self.test_button = Button(
-            self.test_frame, text="Run Tests", command=self.run_speed_test
+            self.test_frame,
+            width=15,
+            height=2,
+            text="Run Tests",
+            font=("Helvetica 10 bold"),
+            command=self.run_speed_test,
         )
-        self.test_button.grid(row=1, column=1, padx=[70, 30])
+        self.test_button.grid(row=1, column=1, padx=[40, 20])
 
         self.results_frame = LabelFrame(self, text="Results")
         self.results_frame.grid(row=1, column=0)
-        self.download_result_label = Label(
-            self.results_frame, text="Download", font=("Helvetica 14 bold")
+        self.download_label = Label(
+            self.results_frame, text="Download", font=("Times 14 bold")
         )
-        self.download_result_label.grid(row=0, column=0, padx=20)
-        self.upload_result_label = Label(
-            self.results_frame, text="Upload", font=("Helvetica 14 bold")
+        self.download_label.grid(row=0, column=0, padx=20)
+        self.upload_label = Label(
+            self.results_frame, text="Upload", font=("Times 14 bold")
         )
-        self.upload_result_label.grid(row=0, column=1, padx=20)
-        self.ping_result_label = Label(
-            self.results_frame, text="Ping", font=("Helvetica 14 bold")
+        self.upload_label.grid(row=0, column=1, padx=20)
+        self.ping_label = Label(
+            self.results_frame, text="Ping", font=("Times 14 bold")
         )
-        self.ping_result_label.grid(row=0, column=2, padx=20)
+        self.ping_label.grid(row=0, column=2, padx=20)
 
     def update_results_label(self, test_name, result):
         formatted_result = f"{test_name}: {result / 1024 / 1024:.2f} Mbit/s"
