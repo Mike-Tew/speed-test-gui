@@ -42,10 +42,10 @@ class Speed_Test_Gui(Tk):
             font=("Arial 14 bold"),
             command=lambda: threading.Thread(target=self.run_speed_test).start(),
         )
-        self.test_button.grid(row=1, column=1, padx=[40, 20])
+        self.test_button.grid(row=1, column=1, padx=[40, 35])
 
         self.results_frame = LabelFrame(self, text="Results")
-        self.results_frame.grid(row=1, column=0, pady=[0, 20], ipady=10)
+        self.results_frame.grid(row=1, column=0, ipady=10)
         self.download_label = Label(
             self.results_frame, text="Download", font=("Courier 18 bold underline")
         )
@@ -68,30 +68,30 @@ class Speed_Test_Gui(Tk):
         self.status_listbox = Listbox(
             self,
             height=5,
-            width=55,
+            width=56,
             bg="black",
             fg="green",
             font=("Helvetica 10 bold"),
             selectborderwidth=1,
         )
-        self.status_listbox.grid(row=2, column=0)
+        self.status_listbox.grid(row=2, column=0, pady=10)
 
     def download_test(self):
-        self.status_listbox.insert(END, "Running Download Test...")
+        self.status_listbox.insert(END, "Running Download Test")
         download_result = f"{self.test.download() / 1024 / 1024:.2f} Mbit/s"
         self.download_result_label["text"] = download_result
 
     def upload_test(self):
-        self.status_listbox.insert(END, "Running Upload Test...")
+        self.status_listbox.insert(END, "Running Upload Test")
         upload_result = f"{self.test.upload() / 1024 / 1024:.2f} Mbit/s"
         self.upload_result_label["text"] = upload_result
 
     def run_speed_test(self):
         self.test = Speedtest()
-        self.status_listbox.insert(END, "Running tests...")
-        self.status_listbox.insert(END, "Loading Server List...")
+        self.status_listbox.insert(END, "Running tests")
+        self.status_listbox.insert(END, "Loading Server List")
         self.test.get_servers()
-        self.status_listbox.insert(END, "Choosing Best Server...")
+        self.status_listbox.insert(END, "Choosing Best Server")
         self.best_server = self.test.get_best_server()
         self.status_listbox.insert(
             END,
@@ -106,7 +106,6 @@ class Speed_Test_Gui(Tk):
 
         if self.ping_var.get() == 1:
             ping = self.test.results.ping
-            formatted_ping_results = f"Ping: {ping:.0f} ms"
             self.ping_result_label["text"] = f"{ping:.0f} ms"
 
 
