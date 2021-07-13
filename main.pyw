@@ -65,34 +65,34 @@ class Speed_Test_Gui(Tk):
         self.ping_result_label = Label(self.results_frame, font=("Tahoma 12 bold"))
         self.ping_result_label.grid(row=1, column=2)
 
-        self.status_listbox = Listbox(self, height=5, width=65)
+        self.status_listbox = Listbox(
+            self,
+            height=5,
+            width=55,
+            bg="black",
+            fg="green",
+            font=("Helvetica 10 bold"),
+            selectborderwidth=1,
+        )
         self.status_listbox.grid(row=2, column=0)
 
     def download_test(self):
-        print("Running Download Test...")
         self.status_listbox.insert(END, "Running Download Test...")
         download_result = f"{self.test.download() / 1024 / 1024:.2f} Mbit/s"
         self.download_result_label["text"] = download_result
 
     def upload_test(self):
-        print("Running Upload Test...")
         self.status_listbox.insert(END, "Running Upload Test...")
         upload_result = f"{self.test.upload() / 1024 / 1024:.2f} Mbit/s"
         self.upload_result_label["text"] = upload_result
 
     def run_speed_test(self):
         self.test = Speedtest()
-        print("Running test...")
         self.status_listbox.insert(END, "Running tests...")
-        print("Loading Server List...")
         self.status_listbox.insert(END, "Loading Server List...")
         self.test.get_servers()
-        print("Choosing best server...")
         self.status_listbox.insert(END, "Choosing Best Server...")
         self.best_server = self.test.get_best_server()
-        print(
-            f"Server: {self.best_server['name']} located in {self.best_server['country']}"
-        )
         self.status_listbox.insert(
             END,
             f"Server: {self.best_server['name']} located in {self.best_server['country']}",
@@ -105,10 +105,8 @@ class Speed_Test_Gui(Tk):
             self.upload_test()
 
         if self.ping_var.get() == 1:
-            print("Ping test")
             ping = self.test.results.ping
             formatted_ping_results = f"Ping: {ping:.0f} ms"
-            print(f"Ping: {ping:.0f} ms")
             self.ping_result_label["text"] = f"{ping:.0f} ms"
 
 
