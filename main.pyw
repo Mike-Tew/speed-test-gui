@@ -1,5 +1,6 @@
 from speedtest import Speedtest
-from tkinter import Tk, LabelFrame, Button, Label, Checkbutton, IntVar
+import threading
+from tkinter import Tk, LabelFrame, Button, Label, Checkbutton, IntVar, Listbox, END
 
 
 class Speed_Test_Gui(Tk):
@@ -39,7 +40,7 @@ class Speed_Test_Gui(Tk):
             width=10,
             text="Run Tests",
             font=("Arial 14 bold"),
-            command=self.run_speed_test,
+            command=lambda: threading.Thread(target=self.run_speed_test).start(),
         )
         self.test_button.grid(row=1, column=1, padx=[40, 20])
 
@@ -49,44 +50,52 @@ class Speed_Test_Gui(Tk):
             self.results_frame, text="Download", font=("Courier 18 bold underline")
         )
         self.download_label.grid(row=0, column=0, padx=20, pady=[10, 5])
-        self.download_result_label = Label(
-            self.results_frame, text="--", font=("Tahoma 12 bold")
-        )
+        self.download_result_label = Label(self.results_frame, font=("Tahoma 12 bold"))
         self.download_result_label.grid(row=1, column=0)
         self.upload_label = Label(
             self.results_frame, text="Upload", font=("Courier 18 bold underline")
         )
         self.upload_label.grid(row=0, column=1, padx=20, pady=[10, 5])
-        self.upload_result_label = Label(
-            self.results_frame, text="--", font=("Tahoma 12 bold")
-        )
+        self.upload_result_label = Label(self.results_frame, font=("Tahoma 12 bold"))
         self.upload_result_label.grid(row=1, column=1)
-        self.ping_label = Label(self.results_frame, text="Ping", font=("Courier 18 bold underline"))
-        self.ping_label.grid(row=0, column=2, padx=20, pady=[10, 5])
-        self.ping_result_label = Label(
-            self.results_frame, text="--", font=("Tahoma 12 bold")
+        self.ping_label = Label(
+            self.results_frame, text="Ping", font=("Courier 18 bold underline")
         )
+        self.ping_label.grid(row=0, column=2, padx=20, pady=[10, 5])
+        self.ping_result_label = Label(self.results_frame, font=("Tahoma 12 bold"))
         self.ping_result_label.grid(row=1, column=2)
+
+        self.status_listbox = Listbox(self, height=5, width=65)
+        self.status_listbox.grid(row=2, column=0)
 
     def download_test(self):
         print("Running Download Test...")
+        self.status_listbox.insert(END, "Running Download Test...")
         download_result = f"{self.test.download() / 1024 / 1024:.2f} Mbit/s"
         self.download_result_label["text"] = download_result
 
     def upload_test(self):
         print("Running Upload Test...")
+        self.status_listbox.insert(END, "Running Upload Test...")
         upload_result = f"{self.test.upload() / 1024 / 1024:.2f} Mbit/s"
         self.upload_result_label["text"] = upload_result
 
     def run_speed_test(self):
         self.test = Speedtest()
         print("Running test...")
+        self.status_listbox.insert(END, "Running tests...")
         print("Loading Server List...")
+        self.status_listbox.insert(END, "Loading Server List...")
         self.test.get_servers()
         print("Choosing best server...")
+        self.status_listbox.insert(END, "Choosing Best Server...")
         self.best_server = self.test.get_best_server()
         print(
             f"Server: {self.best_server['name']} located in {self.best_server['country']}"
+        )
+        self.status_listbox.insert(
+            END,
+            f"Server: {self.best_server['name']} located in {self.best_server['country']}",
         )
 
         if self.download_var.get() == 1:
