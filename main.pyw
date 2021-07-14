@@ -1,5 +1,5 @@
 from speedtest import Speedtest
-import threading
+from threading import Thread
 from tkinter import Tk, LabelFrame, Button, Label, Checkbutton, IntVar, Listbox, END
 
 
@@ -40,7 +40,7 @@ class Speed_Test_Gui(Tk):
             width=10,
             text="Run Tests",
             font=("Arial 14 bold"),
-            command=lambda: threading.Thread(target=self.run_speed_test).start(),
+            command=lambda: Thread(target=self.run_speed_test).start(),
         )
         self.test_button.grid(row=1, column=1, padx=[40, 35])
 
@@ -50,29 +50,34 @@ class Speed_Test_Gui(Tk):
             self.results_frame, text="Download", font=("Courier 18 bold underline")
         )
         self.download_label.grid(row=0, column=0, padx=20, pady=[10, 5])
-        self.download_result_label = Label(self.results_frame, font=("Tahoma 12 bold"))
+        self.download_result_label = Label(
+            self.results_frame, text="--", font=("Tahoma 12 bold")
+        )
         self.download_result_label.grid(row=1, column=0)
         self.upload_label = Label(
             self.results_frame, text="Upload", font=("Courier 18 bold underline")
         )
         self.upload_label.grid(row=0, column=1, padx=20, pady=[10, 5])
-        self.upload_result_label = Label(self.results_frame, font=("Tahoma 12 bold"))
+        self.upload_result_label = Label(
+            self.results_frame, text="--", font=("Tahoma 12 bold")
+        )
         self.upload_result_label.grid(row=1, column=1)
         self.ping_label = Label(
             self.results_frame, text="Ping", font=("Courier 18 bold underline")
         )
         self.ping_label.grid(row=0, column=2, padx=20, pady=[10, 5])
-        self.ping_result_label = Label(self.results_frame, font=("Tahoma 12 bold"))
+        self.ping_result_label = Label(
+            self.results_frame, text="--", font=("Tahoma 12 bold")
+        )
         self.ping_result_label.grid(row=1, column=2)
 
         self.status_listbox = Listbox(
             self,
-            height=5,
+            height=6,
             width=56,
             bg="black",
             fg="green",
             font=("Helvetica 10 bold"),
-            selectborderwidth=1,
         )
         self.status_listbox.grid(row=2, column=0, pady=10)
 
@@ -87,9 +92,12 @@ class Speed_Test_Gui(Tk):
         self.upload_result_label["text"] = upload_result
 
     def run_speed_test(self):
+        self.status_listbox.delete(0, END)
+        self.download_result_label["text"] = "--"
+        self.upload_result_label["text"] = "--"
+        self.ping_result_label["text"] = "--"
         self.test = Speedtest()
-        self.status_listbox.insert(END, "Running tests")
-        self.status_listbox.insert(END, "Loading Server List")
+        self.status_listbox.insert(END, "Running Tests")
         self.test.get_servers()
         self.status_listbox.insert(END, "Choosing Best Server")
         self.best_server = self.test.get_best_server()
@@ -107,6 +115,8 @@ class Speed_Test_Gui(Tk):
         if self.ping_var.get() == 1:
             ping = self.test.results.ping
             self.ping_result_label["text"] = f"{ping:.0f} ms"
+
+        self.status_listbox.insert(END, "Testing Completed")
 
 
 if __name__ == "__main__":
